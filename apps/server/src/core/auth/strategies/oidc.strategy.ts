@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Client, Issuer, TokenSet, UserinfoResponse } from 'openid-client';
+import { Client, Issuer, TokenSet, UserinfoResponse } from 'openid-client';
 import { EnvironmentService } from '../../../integrations/environment/environment.service';
 
 export interface OidcProfile extends UserinfoResponse {
@@ -12,12 +11,11 @@ export interface OidcProfile extends UserinfoResponse {
 }
 
 @Injectable()
-export class OidcStrategy extends PassportStrategy(Strategy, 'oidc') {
+export class OidcStrategy {
   private client: Client;
 
   constructor(private readonly environmentService: EnvironmentService) {
-    // The client will be initialized lazily via getClient()
-    super({} as any);
+    // Client will be initialized lazily via getClient()
   }
 
   async getClient(): Promise<Client> {
