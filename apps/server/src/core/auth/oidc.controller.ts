@@ -61,7 +61,7 @@ export class OidcController {
 
       this.logger.log(`Redirecting to OIDC provider for workspace: ${workspace.id}`);
       
-      return res.redirect(HttpStatus.FOUND, authUrl);
+      return res.redirect(authUrl, HttpStatus.FOUND);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
@@ -102,7 +102,7 @@ export class OidcController {
 
       // Redirect to home page
       const appUrl = this.environmentService.getAppUrl();
-      return res.redirect(HttpStatus.FOUND, `${appUrl}/home`);
+      return res.redirect(`${appUrl}/home`, HttpStatus.FOUND);
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown error';
       const stack = error instanceof Error ? error.stack : undefined;
@@ -111,8 +111,8 @@ export class OidcController {
       // Redirect to login with error
       const appUrl = this.environmentService.getAppUrl();
       return res.redirect(
-        HttpStatus.FOUND,
         `${appUrl}/login?error=${encodeURIComponent(message)}`,
+        HttpStatus.FOUND,
       );
     }
   }

@@ -16,9 +16,8 @@ export class OidcStrategy extends PassportStrategy(Strategy, 'oidc') {
   private client: Client;
 
   constructor(private readonly environmentService: EnvironmentService) {
-    super({
-      passReqToCallback: false,
-    });
+    // The client will be initialized lazily via getClient()
+    super({} as any);
   }
 
   async getClient(): Promise<Client> {
