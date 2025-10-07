@@ -250,4 +250,8 @@ export class EnvironmentService {
       this.getOidcClientSecret()
     );
   }
+
+  getOidcLogoutUrl(): string {
+    return this.configService.get<string>('OIDC_LOGOUT_URL');
+  }
 }
