@@ -85,6 +85,33 @@ docker restart docmost
 | `OIDC_CLIENT_SECRET` | Yes | - | Client secret from your OIDC provider |
 | `OIDC_REDIRECT_URI` | No | `{APP_URL}/api/auth/oidc/callback` | OAuth callback URL |
 | `OIDC_AUTO_PROVISION` | No | `true` | Automatically create users on first login |
+| `OIDC_LOGOUT_URL` | No | - | OIDC provider logout URL for single sign-out |
+
+### OIDC Logout (Single Sign-Out)
+
+To log users out of both Docmost and your OIDC provider (e.g., Authelia) when they click logout, configure the OIDC logout URL:
+
+```bash
+# Log out from both Docmost and OIDC provider
+OIDC_LOGOUT_URL=https://auth.example.com/logout
+
+# With redirect back to Docmost after logout
+OIDC_LOGOUT_URL=https://auth.example.com/logout?rd=https://docmost.example.com
+```
+
+**How it works:**
+1. User clicks "Logout" in Docmost
+2. Docmost clears its authentication cookie
+3. User is redirected to the OIDC provider's logout URL
+4. OIDC provider clears its session
+5. (Optional) User is redirected back to Docmost
+
+**Common logout URL patterns:**
+- **Authelia:** `https://auth.example.com/logout?rd={redirect_url}`
+- **Keycloak:** `https://keycloak.example.com/realms/{realm}/protocol/openid-connect/logout?redirect_uri={redirect_url}`
+- **Auth0:** `https://{tenant}.auth0.com/v2/logout?returnTo={redirect_url}`
+
+If `OIDC_LOGOUT_URL` is not configured, users will only be logged out of Docmost (standard behavior).
 
 ### Validation
 
@@ -172,6 +199,7 @@ services:
       OIDC_CLIENT_ID: 'docmost'
       OIDC_CLIENT_SECRET: 'your_secret'
       OIDC_AUTO_PROVISION: 'true'
+      OIDC_LOGOUT_URL: 'https://auth.example.com/logout?rd=https://docmost.example.com'
     networks:
       - shared  # Share network with Authelia
 ```
