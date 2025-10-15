@@ -26,6 +26,9 @@ export class OidcService {
       scope: 'openid email profile',
       redirect_uri: redirectUri,
       state: state,
+      // Force fresh authentication at the OIDC provider
+      // This prevents using cached OIDC sessions when switching users
+      prompt: 'login',
     });
 
     this.logger.log(`Generated OIDC authorization URL`);

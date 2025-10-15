@@ -50,6 +50,10 @@ export class OidcController {
     }
 
     try {
+      // Clear any existing auth cookie to ensure fresh authentication
+      // This prevents session conflicts when switching between OIDC users
+      res.clearCookie('authToken');
+
       // Generate state for CSRF protection
       const state = nanoid(32);
       this.stateStore.set(state, {
@@ -96,6 +100,10 @@ export class OidcController {
         state,
         workspaceId,
       );
+
+      // Clear any existing auth cookie before setting the new one
+      // This ensures we don't have conflicting sessions
+      res.clearCookie('authToken');
 
       // Set auth cookie
       this.setAuthCookie(res, authToken);
