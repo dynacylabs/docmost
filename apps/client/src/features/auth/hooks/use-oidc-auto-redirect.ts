@@ -19,6 +19,11 @@ export function useOidcAutoRedirect() {
         const status = await getOidcStatus();
         
         if (status.enabled) {
+          // Clear all local storage to prevent session conflicts
+          // This ensures old user data doesn't persist when switching OIDC users
+          localStorage.clear();
+          sessionStorage.clear();
+          
           // Redirect to OIDC login
           window.location.href = getOidcLoginUrl();
           return;

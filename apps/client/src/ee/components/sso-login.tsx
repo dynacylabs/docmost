@@ -24,6 +24,11 @@ export default function SsoLogin() {
       setSelectedLdapProvider(provider);
       setLdapModalOpened(true);
     } else {
+      // Clear all local storage to prevent session conflicts
+      // This ensures old user data doesn't persist when switching OIDC users
+      localStorage.clear();
+      sessionStorage.clear();
+      
       // Redirect for other SSO providers
       window.location.href = buildSsoLoginUrl({
         providerId: provider.id,
