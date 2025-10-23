@@ -9,7 +9,7 @@ COPY . .
 
 RUN npm install -g pnpm@10.4.0
 RUN pnpm install --frozen-lockfile
-RUN pnpm build
+RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm build
 
 FROM base AS installer
 
